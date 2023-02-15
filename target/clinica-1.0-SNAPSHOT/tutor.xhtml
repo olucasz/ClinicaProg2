@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Sem título</title>
+    </h:head>
+    <h:body > 
+        <h:panelGrid columns="2" style="width: 100%; text-align: right;">
+            <h:form id="formVoltar" >                   
+                <p:commandLink  action="menu" value="Voltar ao menu" />
+            </h:form>
+        </h:panelGrid>
+        
+        <p:fieldset legend="Novo Usuário" toggleable="true"  collapsed="true" >
+            <h:form id="formNovo" >
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Nome:  " />
+                    <p:inputText id="nome" 
+                                 value="#{tutorControle.tutor.nome}"/>
+                    <h:outputLabel value="Endereço:  " />
+                    <p:inputText id="endereco" 
+                                 value="#{tutorControle.tutor.endereco}"/>
+                    <h:outputLabel value="Telefone:  " />
+                    <p:inputText id="telefone" 
+                                 value="#{tutorControle.tutor.telefone}"/>
+                    <h:outputLabel value="Data nascimento:  " />
+                    <p:calendar id="data" pattern="dd/MM/yyyy"
+                                value="#{tutorControle.tutor.dataNascimento}" 
+                                required="true" requiredMessage="Data obrigatória"
+                                showOn="button"
+                                locale="pt"/>
+                    <h:outputLabel value="CPF:  " />
+                    <p:inputText id="cpf" 
+                                 value="#{tutorControle.tutor.cpf}"/>
+                    <p:commandButton value="cancelar" immediate="true" action="menu"/>
+                    <p:commandButton value="salvar" 
+                                     action="#{tutorControle.salvar()}"
+                                     update="formNovo, :formTabela" />
+                </h:panelGrid>
+                <p:messages showIcon="false" closable="true"/>
+            </h:form>
+        </p:fieldset>
+        <p/>
+        <h:form id="formTabela">  
+            <p:dataTable id="tabelaTutores"  
+                         value="#{tutorControle.lista}" 
+                         var="item"
+                         lazy="true"
+                         emptyMessage="Nenhum usuário cadastrado"
+                         tableStyle="width:auto;  min-width: 100%" >
+
+                <p:column headerText="Código">
+                    <h:outputText value="#{item.codigo}"/>
+                </p:column>
+                <p:column headerText="Nome">
+                    <h:outputText value="#{item.nome}"/>
+                </p:column>
+                <p:column headerText="CPF">
+                    <h:outputText value="#{item.cpf}"/>
+                </p:column>
+                <p:column headerText="Telefone">
+                    <h:outputText value="#{item.telefone}"/>
+                </p:column>
+                <p:column headerText="Alterar"> 
+                    <p:commandLink value="alterar"
+                                   action="#{tutorControle.alterar(item)}"
+                                   update="formTabela,:formAlteracao"/>
+                </p:column>
+                <p:column headerText="Excluir"> 
+                    <p:commandButton value="excluir" 
+                                     action="#{tutorControle.excluir(item.codigo)}"
+                                     update="formTabela" />
+                </p:column>
+            </p:dataTable>
+            
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel style="width: 100%; text-align:center" layout="block"> 
+                    <p:commandButton value="sim" type="button" styleClass="ui-confirmdialog-yes"  />
+                    <p:commandButton value="não" type="button" styleClass="ui-confirmdialog-no"  />
+                </p:outputPanel>
+            </p:confirmDialog>
+            
+        </h:form>
+
+        
+        <h:form id="formAlteracao">
+            <p:dialog widgetVar="popupAlteracao" width="50%" modal="true"
+                      header="Alteração"
+                      visible="#{tutorControle.mostraPopupAlteracao}">
+
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Código:  " />
+                    <p:inputText id="codigo2"  disabled="true"
+                                 value="#{tutorControle.tutor.codigo}"/>
+                    <h:outputLabel value="Nome:  " />
+                    <p:inputText id="nome2" 
+                                 value="#{tutorControle.tutor.nome}"/>
+                    <h:outputLabel value="Endereço:  " />
+                    <p:inputText id="endereco2" 
+                                 value="#{tutorControle.tutor.endereco}"/>
+                    <h:outputLabel value="Telefone:  " />
+                    <p:inputText id="telefone2" 
+                                 value="#{tutorControle.tutor.telefone}"/>
+                    <h:outputLabel value="Data nascimento:  " />
+                    <p:calendar id="data2" pattern="dd/MM/yyyy"
+                                value="#{tutorControle.tutor.dataNascimento}" 
+                                required="true" requiredMessage="Data obrigatória"
+                                showOn="button"
+                                locale="pt"/>
+                    <h:outputLabel value="Login:  " />
+                    <p:inputText id="cpf" 
+                                 value="#{tutorControle.tutor.cpf}">
+                    </p:inputText>
+                    <p:commandButton value="cancelar" immediate="true" 
+                                     action="#{tutorControle.fecharPopupAlteracao()}"
+                                     update="formAlteracao"/>
+                    <p:commandButton value="salvar" 
+                                     action="#{tutorControle.salvarAlteracao()}"
+                                     update="formAlteracao, :formTabela" />
+                </h:panelGrid>
+                <p:messages showIcon="false" closable="true"/>
+
+            </p:dialog>
+        </h:form>
+
+    </h:body>
+</html>

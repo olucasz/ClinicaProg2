@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Sem título</title>
+    </h:head>
+    <h:body > 
+        <h:panelGrid columns="2" style="width: 100%; text-align: right;">
+            <h:form id="formVoltar" >                   
+                <p:commandLink  action="menu" value="Voltar ao menu" />
+            </h:form>
+        </h:panelGrid>
+
+        <p:fieldset legend="Nova Consulta" toggleable="true"  collapsed="true" >
+            <h:form id="formNovo" >
+                <h:panelGrid columns="2">
+                    
+                    <h:outputLabel value="Animal:  " />
+                    <p:selectOneMenu id="comboAnimal" converter="animalConverter" 
+                                     required="true" requiredMessage="Selecione um animal"  
+                                     value="#{consultaControle.consulta.animal}" >
+                        <f:selectItem itemValue="#{null}" itemLabel="Escolha um Animal" 
+                                      noSelectionOption="false"/>
+                        <f:selectItems value="#{consultaControle.listaAnimal}" 
+                                       var="tut"
+                                       itemValue="#{tut}"
+                                       itemLabel="#{tut.nome}"/>
+                    </p:selectOneMenu>
+                     
+                     <h:outputLabel value="Data da consulta:  " />
+                     <p:calendar id="data" pattern="dd/MM/yyyy"
+                                value="#{consultaControle.consulta.dataConsulta}" 
+                                required="true" requiredMessage="Data obrigatória"
+                                showOn="button"
+                                locale="pt"/>
+                     
+                     <h:outputLabel value="Detalhes :  " />
+                     <p:inputText value="#{consultaControle.consulta.detalhes}"/>
+                     
+                     <h:outputLabel value="Valor:  " />
+                     <p:inputText value="#{consultaControle.consulta.valor}"/>
+                     
+                     <h:outputLabel value="Pago:  " />
+                     <p:selectBooleanCheckbox value="#{consultaControle.consulta.pago}" />
+                     
+                     
+                     <p:commandButton value="salvar" 
+                                     action="#{consultaControle.salvar()}"
+                                     update="formNovo" />
+                     
+
+                </h:panelGrid>  
+            </h:form>
+        </p:fieldset>
+        <h:form id="formTabela">  
+            <p:dataTable id="tabelaTutores"  
+                         value="#{consultaControle.consultaNaoPago}" 
+                         var="item"
+                         lazy="true"
+                         emptyMessage="Nenhum usuário cadastrado"
+                         tableStyle="width:auto;  min-width: 100%" >
+
+                <p:column headerText="Nome">
+                    <h:outputText value="#{item.animal.nome}"/>
+                </p:column>
+                <p:column headerText="Data Consulta">
+                    <h:outputText value="#{item.dataConsulta}"/>
+                </p:column>
+                <p:column headerText="Valor">
+                    <h:outputText value="#{item.valor}"/>
+                </p:column>
+            </p:dataTable>
+            
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:outputPanel style="width: 100%; text-align:center" layout="block"> 
+                    <p:commandButton value="sim" type="button" styleClass="ui-confirmdialog-yes"  />
+                    <p:commandButton value="não" type="button" styleClass="ui-confirmdialog-no"  />
+                </p:outputPanel>
+            </p:confirmDialog>
+            
+        </h:form>
+    </h:body>
+</html>
